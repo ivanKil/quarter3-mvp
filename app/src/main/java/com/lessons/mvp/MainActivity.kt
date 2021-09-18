@@ -1,35 +1,31 @@
 package com.lessons.mvp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import com.lessons.mvp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), MainView {
+    private val mapButtons = HashMap<Int, Button>()
 
     private var vb: ActivityMainBinding? = null
-    val presenter = MainPresenter(this)
+    private val presenter = MainPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb?.root)
 
-        val listener = View.OnClickListener {
-            presenter.counterClick(it.id)
-        }
+        mapButtons[0] = vb!!.btnCounter1
+        mapButtons[1] = vb!!.btnCounter2
+        mapButtons[2] = vb!!.btnCounter3
 
-        vb?.btnCounter1?.setOnClickListener(listener)
-        vb?.btnCounter2?.setOnClickListener(listener)
-        vb?.btnCounter3?.setOnClickListener(listener)
+        mapButtons.keys.forEach { key ->
+            mapButtons[key]!!.setOnClickListener { presenter.counterClick(key) }
+        }
     }
 
-    //Подсказка к ПЗ: поделить на 3 отдельные функции и избавиться от index
     override fun setButtonText(index: Int, text: String) {
-        when(index){
-            0 -> vb?.btnCounter1?.text = text
-            1 -> vb?.btnCounter2?.text = text
-            2 -> vb?.btnCounter3?.text = text
-        }
+        mapButtons[index]?.text = text
     }
 }
