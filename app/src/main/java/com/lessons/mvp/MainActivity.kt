@@ -1,35 +1,42 @@
 package com.lessons.mvp
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.lessons.mvp.databinding.ActivityMainBinding
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity : MvpAppCompatActivity(), MainView {
 
+    val navigator = AppNavigator(this, R.id.container)
+
+    private val presenter by moxyPresenter { MainPresenter(App.instance.router, AndroidScreens()) }
     private var vb: ActivityMainBinding? = null
-    private val presenter = MainPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb?.root)
-
-        vb?.btnCounter1?.setOnClickListener { presenter.counter1Click() }
-        vb?.btnCounter2?.setOnClickListener { presenter.counter2Click() }
-        vb?.btnCounter3?.setOnClickListener { presenter.counter3Click() }
     }
 
-    override fun setButton1Text(text: String) {
-        vb?.btnCounter1?.text = text
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        App.instance.navigatorHolder.setNavigator(navigator)
     }
 
-
-    override fun setButton2Text(text: String) {
-        vb?.btnCounter2?.text = text
+    override fun onPause() {
+        super.onPause()
+        App.instance.navigatorHolder.removeNavigator()
     }
 
-
-    override fun setButton3Text(text: String) {
-        vb?.btnCounter3?.text = text
+    override fun onBackPressed() {
+        supportFragmentManager.fragments.forEach {
+            if (it is BackButtonListener && it.backPressed()) {
+                return
+            }
+        }
+        presenter.backClicked()
     }
 }
+
+
