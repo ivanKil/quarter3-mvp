@@ -1,24 +1,17 @@
 package com.lessons.mvp
 
-class MainPresenter(val view: MainView) {
-    val model = CountersModel()
+class MainPresenter(private val view: MainView) {
+    private val model = CountersModel()
 
-    //Архитектурная ошибка. В качестве практического задания -- исправить
-    fun counterClick(id: Int){
-        when(id){
-            R.id.btn_counter1 -> {
-                val nextValue = model.next(0)
-                view.setButtonText(0, nextValue.toString())
-            }
-            R.id.btn_counter2 -> {
-                val nextValue = model.next(1)
-                view.setButtonText(1, nextValue.toString())
-            }
-            R.id.btn_counter3 -> {
-                val nextValue = model.next(2)
-                view.setButtonText(2, nextValue.toString())
-            }
-        }
+    fun counter1Click() {
+        view.setButton1Text(model.next(0).toString())
     }
 
+    fun counter2Click() {
+        view.setButton2Text(model.next(1).toString())
+    }
+
+    fun counter3Click() {
+        view.setButton3Text(model.next(2).toString())
+    }
 }
