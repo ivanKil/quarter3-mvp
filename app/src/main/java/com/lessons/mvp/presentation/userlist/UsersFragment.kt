@@ -3,9 +3,11 @@ package com.lessons.mvp.presentation.userlist
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lessons.mvp.App
 import com.lessons.mvp.BackButtonListener
+import com.lessons.mvp.R
 import com.lessons.mvp.data.GithubUsersRepo
 import com.lessons.mvp.databinding.FragmentUsersBinding
 import moxy.MvpAppCompatFragment
@@ -41,6 +43,13 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun updateList() {
         adapter?.notifyDataSetChanged()
+    }
+
+    override fun showError(er: Throwable) {
+        Toast.makeText(
+            requireActivity(), requireContext().getString(R.string.err_get_list),
+            Toast.LENGTH_LONG
+        ).show();
     }
 
     override fun backPressed() = presenter.backPressed()
