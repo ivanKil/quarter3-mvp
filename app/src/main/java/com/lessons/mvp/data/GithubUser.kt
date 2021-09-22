@@ -1,4 +1,4 @@
-package com.lessons.mvp.userlist
+package com.lessons.mvp.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

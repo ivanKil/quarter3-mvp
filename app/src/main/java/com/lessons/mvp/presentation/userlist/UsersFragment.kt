@@ -1,11 +1,13 @@
-package com.lessons.mvp
+package com.lessons.mvp.presentation.userlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lessons.mvp.App
+import com.lessons.mvp.BackButtonListener
+import com.lessons.mvp.data.GithubUsersRepo
 import com.lessons.mvp.databinding.FragmentUsersBinding
-import com.lessons.mvp.userlist.UsersRVAdapter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 

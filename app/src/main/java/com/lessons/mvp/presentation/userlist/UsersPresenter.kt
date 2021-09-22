@@ -1,15 +1,20 @@
-package com.lessons.mvp
+package com.lessons.mvp.presentation.userlist
 
 import com.github.terrakok.cicerone.Router
-import com.lessons.mvp.userlist.GithubUser
-import com.lessons.mvp.userlist.UserItemView
+import com.lessons.mvp.IUserListPresenter
+import com.lessons.mvp.UserScreen
+import com.lessons.mvp.data.GithubUser
+import com.lessons.mvp.data.GithubUsersRepo
 import moxy.MvpPresenter
 
-class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
+class UsersPresenter(
+    private val usersRepo: GithubUsersRepo,
+    private val router: Router
+) :
     MvpPresenter<UsersView>() {
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
-        override var itemClickListener: ((UserItemView) -> Unit)? = null
+        override var itemClickListener: ((UserItemView, Int) -> Unit)? = null
 
         override fun getCount() = users.size
 
@@ -26,8 +31,8 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
         viewState.init()
         loadData()
 
-        usersListPresenter.itemClickListener = { itemView ->
-            //TODO: переход на экран пользователя c помощью router.navigateTo
+        usersListPresenter.itemClickListener = { itemView, pos ->
+            router.navigateTo(UserScreen(usersListPresenter.users[pos]))
         }
     }
 

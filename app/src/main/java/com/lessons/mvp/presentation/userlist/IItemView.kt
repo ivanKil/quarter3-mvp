@@ -1,4 +1,4 @@
-package com.lessons.mvp.userlist
+package com.lessons.mvp.presentation.userlist
 
 interface IItemView {
     var pos: Int

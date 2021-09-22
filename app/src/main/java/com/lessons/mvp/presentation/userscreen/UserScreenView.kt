@@ -1,11 +1,10 @@
-package com.lessons.mvp
+package com.lessons.mvp.presentation.userscreen
 
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface UsersView : MvpView {
-    fun init()
-    fun updateList()
+interface UserScreenView : MvpView {
+    fun setLogin(login: String)
 }

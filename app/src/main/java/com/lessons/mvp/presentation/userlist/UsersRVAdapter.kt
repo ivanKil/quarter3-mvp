@@ -1,4 +1,4 @@
-package com.lessons.mvp.userlist
+package com.lessons.mvp.presentation.userlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,7 +17,9 @@ class UsersRVAdapter(private val presenter: IUserListPresenter) :
                 false
             )
         ).apply {
-            itemView.setOnClickListener { presenter.itemClickListener?.invoke(this) }
+            itemView.setOnClickListener {
+                presenter.itemClickListener?.invoke(this, pos)
+            }
         }
 
     override fun getItemCount() = presenter.getCount()

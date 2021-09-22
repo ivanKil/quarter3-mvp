@@ -1,6 +1,4 @@
-package com.lessons.mvp
-
-import com.lessons.mvp.userlist.GithubUser
+package com.lessons.mvp.data
 
 class GithubUsersRepo {
     private val repositories = listOf(
