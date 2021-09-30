@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.lessons.mvp.R
-import com.lessons.mvp.data.GithubUser
+import com.lessons.mvp.data.user.GitHubUser
 import com.lessons.mvp.databinding.FragmentUserScreenBinding
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -17,7 +17,7 @@ const val EXT_USER = "USER"
 class UserScreenFragment : MvpAppCompatFragment(), UserScreenView {
 
     companion object {
-        fun newInstance(user: GithubUser?): Fragment {
+        fun newInstance(user: GitHubUser?): Fragment {
 
             return UserScreenFragment().apply {
                 arguments = bundleOf(Pair(EXT_USER, user))

@@ -10,10 +10,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lessons.mvp.App
 import com.lessons.mvp.BackButtonListener
 import com.lessons.mvp.R
-import com.lessons.mvp.data.GithubUsersRepo
 import com.lessons.mvp.databinding.FragmentUsersBinding
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import ru.gb.gb_popular_libs.data.user.GitHubUserRepositoryFactory
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     companion object {
@@ -21,7 +21,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     }
 
     private val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(GithubUsersRepo(), App.instance.router)
+        UsersPresenter(GitHubUserRepositoryFactory.create(), App.instance.router)
     }
     private var adapter: UsersRVAdapter? = null
 
@@ -34,7 +34,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(presenter.usersListPresenter)
+        adapter = UsersRVAdapter(presenter.usersListPresenter, GlideImageLoader())
         vb?.rvUsers?.adapter = adapter
     }
 
