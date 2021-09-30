@@ -6,6 +6,9 @@ import moxy.MvpPresenter
 class UserScreenPresenter(private val user: GithubUser?) : MvpPresenter<UserScreenView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.setLogin(user?.login ?: "")
+        if (user != null)
+            viewState.setLogin(user.login)
+        else
+            viewState.setError()
     }
 }

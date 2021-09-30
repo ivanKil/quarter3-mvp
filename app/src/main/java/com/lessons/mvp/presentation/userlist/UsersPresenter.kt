@@ -3,9 +3,10 @@ package com.lessons.mvp.presentation.userlist
 import com.github.terrakok.cicerone.Router
 import com.lessons.mvp.IUserListPresenter
 import com.lessons.mvp.UserScreen
+import com.lessons.mvp.addTo
 import com.lessons.mvp.data.GithubUser
 import com.lessons.mvp.data.GithubUsersRepo
-import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
 
 class UsersPresenter(
@@ -24,7 +25,7 @@ class UsersPresenter(
         }
     }
 
-    private var disposable: Disposable? = null
+    private var disposables = CompositeDisposable()
     val usersListPresenter = UsersListPresenter()
 
     override fun onFirstViewAttach() {
@@ -32,13 +33,15 @@ class UsersPresenter(
         viewState.init()
         loadData()
 
-        usersListPresenter.itemClickListener = { itemView, pos ->
-            router.navigateTo(UserScreen(usersListPresenter.users[pos]))
-        }
+        usersListPresenter.itemClickListener = { _, pos -> displayUser(pos) }
+    }
+
+    fun displayUser(position: Int) {
+        router.navigateTo(UserScreen(usersListPresenter.users[position]))
     }
 
     private fun loadData() {
-        disposable = usersRepo.getUsers().subscribe(::setData, viewState::showError)
+        usersRepo.getUsers().subscribe(::setData, viewState::showError).addTo(disposables)
     }
 
     private fun setData(list: List<GithubUser>) {
@@ -51,9 +54,8 @@ class UsersPresenter(
         return true
     }
 
-    override fun destroyView(view: UsersView?) {
-        super.destroyView(view)
-        disposable?.dispose()
+    override fun onDestroy() {
+        disposables.clear()
     }
 
 }
