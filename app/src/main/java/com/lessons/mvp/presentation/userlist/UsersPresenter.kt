@@ -5,13 +5,13 @@ import com.lessons.mvp.IUserListPresenter
 import com.lessons.mvp.UserScreen
 import com.lessons.mvp.data.GithubUser
 import com.lessons.mvp.data.GithubUsersRepo
+import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
 
 class UsersPresenter(
     private val usersRepo: GithubUsersRepo,
     private val router: Router
-) :
-    MvpPresenter<UsersView>() {
+) : MvpPresenter<UsersView>() {
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
         override var itemClickListener: ((UserItemView, Int) -> Unit)? = null
@@ -24,6 +24,7 @@ class UsersPresenter(
         }
     }
 
+    private var disposable: Disposable? = null
     val usersListPresenter = UsersListPresenter()
 
     override fun onFirstViewAttach() {
@@ -36,15 +37,23 @@ class UsersPresenter(
         }
     }
 
-    fun loadData() {
-        val users = usersRepo.getUsers()
-        usersListPresenter.users.addAll(users)
+    private fun loadData() {
+        disposable = usersRepo.getUsers().subscribe(::setData, viewState::showError)
+    }
+
+    private fun setData(list: List<GithubUser>) {
+        usersListPresenter.users.addAll(list)
         viewState.updateList()
     }
 
     fun backPressed(): Boolean {
         router.exit()
         return true
+    }
+
+    override fun destroyView(view: UsersView?) {
+        super.destroyView(view)
+        disposable?.dispose()
     }
 
 }
