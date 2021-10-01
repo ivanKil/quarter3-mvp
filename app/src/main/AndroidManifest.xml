@@ -3,6 +3,7 @@
     package="com.lessons.mvp">
 
     <application
+        android:name="com.lessons.mvp.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
