@@ -1,11 +1,7 @@
-package ru.gb.gb_popular_libs.data.user
+package com.lessons.mvp.data.user
 
-import ru.gb.gb_popular_libs.data.user.datasource.UserDataSourceFactory
+import com.lessons.mvp.data.user.datasource.UserDataSourceFactory
 
-/**
- * Пока нет DI на основе Dagger2 мы решаем проблему
- * по старинке используя фабрики.
- */
 object GitHubUserRepositoryFactory {
 
     fun create(): GitHubUserRepository =

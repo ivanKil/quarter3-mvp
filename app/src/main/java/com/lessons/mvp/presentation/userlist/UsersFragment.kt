@@ -10,10 +10,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lessons.mvp.App
 import com.lessons.mvp.BackButtonListener
 import com.lessons.mvp.R
+import com.lessons.mvp.data.user.GitHubUserRepositoryFactory
 import com.lessons.mvp.databinding.FragmentUsersBinding
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import ru.gb.gb_popular_libs.data.user.GitHubUserRepositoryFactory
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     companion object {

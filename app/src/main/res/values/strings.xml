@@ -4,5 +4,7 @@
     <string name="counter_two">Счетчик 2</string>
     <string name="counter_three">Счетчик 3</string>
     <string name="err_get_list" type="id">Ошибка получения списка</string>
-    <string name="err_show_user">Jib,rf jnj,hf;tybz gjkmpjdfntkz</string>
+    <string name="err_show_user">Ошибка </string>
+    <string name="err_show_repo">Ошибка получения информации</string>
+    <string name="fork_count">Количество форков</string>
 </resources>

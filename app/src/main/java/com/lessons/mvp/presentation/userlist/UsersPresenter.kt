@@ -2,14 +2,14 @@ package com.lessons.mvp.presentation.userlist
 
 import com.github.terrakok.cicerone.Router
 import com.lessons.mvp.IUserListPresenter
-import com.lessons.mvp.UserScreen
+import com.lessons.mvp.ReposScreen
 import com.lessons.mvp.addTo
 import com.lessons.mvp.data.user.GitHubUser
+import com.lessons.mvp.data.user.GitHubUserRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpPresenter
-import ru.gb.gb_popular_libs.data.user.GitHubUserRepository
 
 class UsersPresenter(
     private val usersRepo: GitHubUserRepository,
@@ -40,7 +40,7 @@ class UsersPresenter(
     }
 
     fun displayUser(position: Int) {
-        router.navigateTo(UserScreen(usersListPresenter.users[position]))
+        router.navigateTo(ReposScreen(usersListPresenter.users[position]))
     }
 
     private fun loadData() {
