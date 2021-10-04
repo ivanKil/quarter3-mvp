@@ -20,11 +20,11 @@ class RepoInfoPresenter(
 
     private fun loadData() {
         repo?.let {
-            usersRepo.getRepoInfo(repo.forksUrl)
+            usersRepo.getRepoInfo(repo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { viewState.showForkCount(it.size) },
+                    { viewState.showForkCount(it) },
                     viewState::setError
                 )
                 .addTo(disposables)

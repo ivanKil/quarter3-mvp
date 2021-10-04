@@ -30,7 +30,7 @@ class ReposFragment : MvpAppCompatFragment(), ReposView, RepoAdapter.Delegate {
     private val presenter: ReposPresenter by moxyPresenter {
         ReposPresenter(
             arguments?.getParcelable(EXT_USER),
-            GitHubUserRepositoryFactory.create(),
+            GitHubUserRepositoryFactory(requireContext()).create(),
             App.instance.router
         )
     }

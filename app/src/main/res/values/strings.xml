@@ -7,4 +7,5 @@
     <string name="err_show_user">Ошибка </string>
     <string name="err_show_repo">Ошибка получения информации</string>
     <string name="fork_count">Количество форков</string>
+    <string name="fork_count_unknow">неизвестно</string>
 </resources>

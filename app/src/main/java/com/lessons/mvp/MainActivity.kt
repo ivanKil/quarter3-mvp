@@ -4,6 +4,7 @@ import android.os.Bundle
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import com.lessons.mvp.data.db.Database
 import com.lessons.mvp.databinding.ActivityMainBinding
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
@@ -19,6 +20,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         //vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb?.root)
+        Database.create(this)
     }
 
     override fun onResumeFragments() {
