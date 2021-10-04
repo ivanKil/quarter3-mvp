@@ -1,55 +1,38 @@
 package com.lessons.mvp.data.user
 
-import com.lessons.mvp.data.db.Database
 import com.lessons.mvp.data.network.INetworkStatus
+import com.lessons.mvp.data.user.datasource.CacheUserDataSource
 import com.lessons.mvp.data.user.datasource.UserDataSource
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 class GitHubUserRepositoryImpl(
-    private val cloud: UserDataSource, val networkStatus: INetworkStatus, val db: Database
+    private val cloud: UserDataSource, private val networkStatus: INetworkStatus,
+    private val cache: CacheUserDataSource
 ) : GitHubUserRepository {
 
     override fun getUsers() = networkStatus.isOnlineSingle().flatMap { isOnline ->
         if (isOnline) {
             cloud.getUsers()
-                .flatMap { users ->
-                    Single.fromCallable {
-                        db.userDao.insert(users)
-                        users
-                    }
-                }
+                .flatMap { users -> cache.retainUsers(users) }
         } else
-            Single.fromCallable { db.userDao.getAll() }
-
+            cache.getUsers()
     }
 
-    override fun getUserRepos(user: GitHubUser) =
+    override fun getUserRepos(user: GitHubUser): Single<List<GitHubUserRepos>> =
         networkStatus.isOnlineSingle().flatMap { isOnline ->
             if (isOnline) {
                 user.repositories?.let { url ->
                     cloud.getUserRepos(url)
                         .flatMap { repositories ->
-                            Single.fromCallable {
-                                val roomRepos = repositories.map {
-                                    GitHubUserRepos(
-                                        it.id,
-                                        it.name ?: "",
-                                        null,
-                                        user.id, -1
-                                    )
+                            cache.retainRepos(repositories.apply {
+                                forEach {
+                                    it.userId = user.id
                                 }
-                                db.repositoryDao.insert(roomRepos)
-                                repositories
-                            }
+                            })
                         }
                 } ?: Single.error<List<GitHubUserRepos>>(RuntimeException("User has no repos url"))
-                    .subscribeOn(Schedulers.io())
-            } else {
-                Single.fromCallable {
-                    db.repositoryDao.findForUser(user.id)
-                }
-            }
+            } else
+                cache.getUserRepos(user)
         }
 
     override fun getRepoInfo(repo: GitHubUserRepos): Single<Int> =
@@ -58,18 +41,12 @@ class GitHubUserRepositoryImpl(
                 repo.forksUrl?.let { forksUrl ->
                     cloud.getRepoInfo(forksUrl)
                         .flatMap { repositories ->
-                            Single.fromCallable {
-                                var repoFromDB = db.repositoryDao.getById(repo.id)
-                                repoFromDB.forksCount = repositories.size
-                                db.repositoryDao.update(repoFromDB)
-                                repositories.size
-                            }
+                            repo.forksCount = repositories.size
+                            cache.retainRepo(repo)
+                            Single.just(repositories.size)
                         }
-                } ?: Single.just(0)
-            } else {
-                Single.fromCallable {
-                    db.repositoryDao.getById(repo.id).forksCount
-                }
-            }
+                } ?: Single.just(-1)
+            } else
+                cache.getRepoInfo(repo)
         }
 }

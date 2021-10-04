@@ -38,7 +38,7 @@ data class GitHubUserRepos(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @Ignore @SerializedName("forks_url") val forksUrl: String?,
-    val userId: String,
+    var userId: String,
     var forksCount: Int,
 ) : Parcelable {
     constructor(

@@ -3,6 +3,7 @@ package com.lessons.mvp.data.user
 import android.content.Context
 import com.lessons.mvp.data.db.Database
 import com.lessons.mvp.data.network.AndroidNetworkStatus
+import com.lessons.mvp.data.user.datasource.CacheUserDataSourceImpl
 import com.lessons.mvp.data.user.datasource.UserDataSourceFactory
 
 class GitHubUserRepositoryFactory(val context: Context) {
@@ -11,7 +12,7 @@ class GitHubUserRepositoryFactory(val context: Context) {
         GitHubUserRepositoryImpl(
             UserDataSourceFactory.create(),
             AndroidNetworkStatus(context),
-            Database.getInstance()
+            CacheUserDataSourceImpl(Database.getInstance())
         )
 
 }
