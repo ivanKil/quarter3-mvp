@@ -4,8 +4,9 @@ import com.lessons.mvp.data.db.Database
 import com.lessons.mvp.data.user.GitHubUser
 import com.lessons.mvp.data.user.GitHubUserRepos
 import io.reactivex.rxjava3.core.Single
+import javax.inject.Inject
 
-class CacheUserDataSourceImpl(private val db: Database) : CacheUserDataSource {
+class CacheUserDataSourceImpl @Inject constructor(private val db: Database) : CacheUserDataSource {
     override fun retainUsers(users: List<GitHubUser>): Single<List<GitHubUser>> {
         db.userDao.insert(users)
         return Single.fromCallable { users }

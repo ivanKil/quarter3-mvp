@@ -5,8 +5,9 @@ import com.lessons.mvp.data.user.GitHubUser
 import com.lessons.mvp.data.user.GitHubUserRepoInfo
 import com.lessons.mvp.data.user.GitHubUserRepos
 import io.reactivex.rxjava3.core.Single
+import javax.inject.Inject
 
-class CloudUserDataSource(private val gitHubApi: GitHubApi) : UserDataSource {
+class CloudUserDataSource @Inject constructor(private val gitHubApi: GitHubApi) : UserDataSource {
 
     override fun getUsers(): Single<List<GitHubUser>> = gitHubApi.getUsers()
     override fun getUserRepos(url: String): Single<List<GitHubUserRepos>> =
