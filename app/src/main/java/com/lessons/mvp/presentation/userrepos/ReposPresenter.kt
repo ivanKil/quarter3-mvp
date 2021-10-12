@@ -24,7 +24,7 @@ class ReposPresenter(
 
     private fun loadData() {
         user?.let {
-            usersRepo.getUserRepos(user.repositories)
+            usersRepo.getUserRepos(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

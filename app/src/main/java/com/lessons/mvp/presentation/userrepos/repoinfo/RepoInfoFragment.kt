@@ -27,7 +27,7 @@ class RepoInfoFragment : MvpAppCompatFragment(), RepoInfoView {
     private val presenter: RepoInfoPresenter by moxyPresenter {
         RepoInfoPresenter(
             arguments?.getParcelable(EXT_REPO_URL),
-            GitHubUserRepositoryFactory.create()
+            GitHubUserRepositoryFactory(requireContext()).create()
         )
     }
 
@@ -44,7 +44,9 @@ class RepoInfoFragment : MvpAppCompatFragment(), RepoInfoView {
     }
 
     override fun showForkCount(count: Int) {
-        vb?.tvForkCount?.text = resources.getString(R.string.fork_count) + " " + count
+        vb?.tvForkCount?.text =
+            resources.getString(R.string.fork_count) + " " +
+                    (if (count == -1) resources.getString(R.string.fork_count_unknow) else count)
     }
 
     override fun setError(er: Throwable) {
