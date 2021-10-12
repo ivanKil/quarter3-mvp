@@ -9,14 +9,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.lessons.mvp.R
 import com.lessons.mvp.data.user.GitHubUserRepos
-import com.lessons.mvp.data.user.GitHubUserRepositoryFactory
 import com.lessons.mvp.databinding.RepoInfoBinding
-import moxy.MvpAppCompatFragment
+import com.lessons.mvp.presentation.abs.AbsFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 const val EXT_REPO_URL = "EXT_REPO_URL"
 
-class RepoInfoFragment : MvpAppCompatFragment(), RepoInfoView {
+class RepoInfoFragment : AbsFragment(R.layout.repo_info), RepoInfoView {
 
     companion object {
         fun newInstance(user: GitHubUserRepos): Fragment = RepoInfoFragment().apply {
@@ -24,11 +24,11 @@ class RepoInfoFragment : MvpAppCompatFragment(), RepoInfoView {
         }
     }
 
+    @Inject
+    lateinit var repoInfoPresenterFactory: RepoInfoPresenterFactory
+
     private val presenter: RepoInfoPresenter by moxyPresenter {
-        RepoInfoPresenter(
-            arguments?.getParcelable(EXT_REPO_URL),
-            GitHubUserRepositoryFactory(requireContext()).create()
-        )
+        repoInfoPresenterFactory.create(arguments?.getParcelable(EXT_REPO_URL))
     }
 
     //private val vb: RepoInfoBinding by viewBinding() // тоже самое, не работает, валится ошибка

@@ -7,19 +7,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import com.lessons.mvp.App
 import com.lessons.mvp.R
 import com.lessons.mvp.data.user.GitHubUser
 import com.lessons.mvp.data.user.GitHubUserRepos
-import com.lessons.mvp.data.user.GitHubUserRepositoryFactory
 import com.lessons.mvp.databinding.ViewReposBinding
+import com.lessons.mvp.presentation.abs.AbsFragment
 import com.lessons.mvp.presentation.userrepos.adapter.RepoAdapter
-import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 const val EXT_USER = "USER"
 
-class ReposFragment : MvpAppCompatFragment(), ReposView, RepoAdapter.Delegate {
+class ReposFragment : AbsFragment(R.layout.view_repos), ReposView, RepoAdapter.Delegate {
+
+    @Inject
+    lateinit var reposPresenterFactory: ReposPresenterFactory
 
     companion object {
         fun newInstance(user: GitHubUser?): Fragment = ReposFragment().apply {
@@ -28,11 +30,7 @@ class ReposFragment : MvpAppCompatFragment(), ReposView, RepoAdapter.Delegate {
     }
 
     private val presenter: ReposPresenter by moxyPresenter {
-        ReposPresenter(
-            arguments?.getParcelable(EXT_USER),
-            GitHubUserRepositoryFactory(requireContext()).create(),
-            App.instance.router
-        )
+        reposPresenterFactory.create(arguments?.getParcelable(EXT_USER))
     }
 
     //private val vb: ViewReposBinding by viewBinding() // TODO это не работает, валится ошибка
@@ -50,7 +48,6 @@ class ReposFragment : MvpAppCompatFragment(), ReposView, RepoAdapter.Delegate {
     }
 
     override fun showRepos(users: List<GitHubUserRepos>) {
-
         repoAdapter.submitList(users)
         repoAdapter.notifyDataSetChanged()
     }

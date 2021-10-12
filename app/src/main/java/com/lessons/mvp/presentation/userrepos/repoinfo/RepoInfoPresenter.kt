@@ -3,13 +3,15 @@ package com.lessons.mvp.presentation.userrepos.repoinfo
 import com.lessons.mvp.addTo
 import com.lessons.mvp.data.user.GitHubUserRepos
 import com.lessons.mvp.data.user.GitHubUserRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpPresenter
 
-class RepoInfoPresenter(
-    private val repo: GitHubUserRepos?,
+class RepoInfoPresenter @AssistedInject constructor(
+    @Assisted private val repo: GitHubUserRepos?,
     private val usersRepo: GitHubUserRepository
 ) : MvpPresenter<RepoInfoView>() {
     private var disposables = CompositeDisposable()

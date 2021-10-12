@@ -4,8 +4,9 @@ import com.lessons.mvp.data.network.INetworkStatus
 import com.lessons.mvp.data.user.datasource.CacheUserDataSource
 import com.lessons.mvp.data.user.datasource.UserDataSource
 import io.reactivex.rxjava3.core.Single
+import javax.inject.Inject
 
-class GitHubUserRepositoryImpl(
+class GitHubUserRepositoryImpl @Inject constructor(
     private val cloud: UserDataSource, private val networkStatus: INetworkStatus,
     private val cache: CacheUserDataSource
 ) : GitHubUserRepository {
