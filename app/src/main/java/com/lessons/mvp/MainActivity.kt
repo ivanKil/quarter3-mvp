@@ -1,6 +1,8 @@
 package com.lessons.mvp
 
 import android.os.Bundle
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.lessons.mvp.databinding.ActivityMainBinding
 import moxy.MvpAppCompatActivity
@@ -8,14 +10,14 @@ import moxy.ktx.moxyPresenter
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
-    val navigator = AppNavigator(this, R.id.container)
+    private val navigator = AppNavigator(this, R.id.container)
 
     private val presenter by moxyPresenter { MainPresenter(App.instance.router) }
-    private var vb: ActivityMainBinding? = null
+    private val vb: ActivityMainBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vb = ActivityMainBinding.inflate(layoutInflater)
+        //vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb?.root)
     }
 

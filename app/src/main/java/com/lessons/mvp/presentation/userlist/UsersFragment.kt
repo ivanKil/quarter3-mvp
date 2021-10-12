@@ -4,40 +4,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lessons.mvp.App
 import com.lessons.mvp.BackButtonListener
 import com.lessons.mvp.R
-import com.lessons.mvp.data.GithubUsersRepo
+import com.lessons.mvp.data.user.GitHubUserRepositoryFactory
 import com.lessons.mvp.databinding.FragmentUsersBinding
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     companion object {
-        fun newInstance() = UsersFragment()
+        fun newInstance(): Fragment = UsersFragment()
     }
 
     private val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(GithubUsersRepo(), App.instance.router)
+        UsersPresenter(GitHubUserRepositoryFactory.create(), App.instance.router)
     }
     private var adapter: UsersRVAdapter? = null
 
-    private var vb: FragmentUsersBinding? = null
+    private val vb: FragmentUsersBinding by viewBinding()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) =
-        FragmentUsersBinding.inflate(inflater, container, false).also { vb = it }.root
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        vb = null
-    }
+        FragmentUsersBinding.inflate(inflater, container, false).root
 
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(presenter.usersListPresenter)
+        adapter = UsersRVAdapter(presenter.usersListPresenter, GlideImageLoader())
         vb?.rvUsers?.adapter = adapter
     }
 
